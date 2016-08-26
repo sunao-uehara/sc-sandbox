@@ -45,3 +45,15 @@ SynthDef(\kik, {| amp=0.3, sustain=1, freq=30 |
 )
 ~kikA = Pbind(\instrument, \kik, \dur, 1, \amp, 0.8, \freq, 50).play;
 ~kikA.stop;
+
+
+(
+// hihat like percussion
+// prepare out arg
+SynthDef(\prc, {| out=0, amp=0.1 |
+	var sig, env;
+	env = EnvGen.kr(Env.perc(0, 0.08), 1, amp, doneAction: 2);
+	sig = WhiteNoise.ar;
+	sig = sig * env;
+	Out.ar(out, sig);
+}).add;
