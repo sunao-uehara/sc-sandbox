@@ -1,3 +1,5 @@
+s.boot;
+
 // hat
 (
 SynthDef(\hat, {| amp=0.1, pan |
