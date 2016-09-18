@@ -59,3 +59,41 @@ SynthDef(\prc, {| out=0, amp=0.1 |
 	sig = sig * env;
 	Out.ar(out, sig);
 }).add;
+
+// chorus effect
+SynthDef(\chorus, {| out=0 |
+	var sig;
+	sig = In.ar(out, 1) * 0.5;// receive mono input
+	// apply delay、and automate delay val by FSinOsc
+	sig = DelayC.ar(sig, 1, FSinOsc.kr(0.25, [0, pi]).range(0.02, 0.03), 0.5, sig);
+	ReplaceOut.ar(out, sig);// override original signal
+}).add;
+)
+
+sig = DelayC.ar(sig, 1, FSinOsc.kr(0.25, [0, pi]).range(0.02, 0.03), 0.5, sig);
+
+{ SinOsc.ar([400, 405], mul: 0.1) }.play;// stereo
+{ SinOsc.ar(400, mul: 0.1) }.play;// mono
+
+/************************************************/
+// first phrase of rydeen
+(
+Tempo.bpm = 142;
+Pbind(\instrument, \prc,
+	\dur, Pseq([0.5, 0.25, 0.25], inf),
+	\amp, Pseq([0.3, 0.13, 0.13], inf)
+).play;
+)//play on pnly left as mono
+
+(
+//Pfxb apply effect to pattern
+//Pfxb(pattern, effect)
+~prcA = Pfxb(
+	Pbind(\instrument, \prc,
+		\dur, Pseq([0.5, 0.25, 0.25], inf),
+		\amp, Pseq([0.3, 0.13, 0.13], inf)
+	),
+	\chorus
+).play;
+)
+
