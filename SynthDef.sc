@@ -97,3 +97,37 @@ Pbind(\instrument, \prc,
 ).play;
 )
 
+
+
+// make base sound by fitering Saw wave
+(
+//prepare arg freq and gate
+SynthDef(\bss, {| gate=1, amp=0.1, sustain=1, freq=440 |
+	var sig, env;
+	env = EnvGen.kr(Env.adsr, gate, amp, 0, sustain, 2);
+	sig = LFSaw.ar(freq);
+	sig = RLPF.ar(sig, 1000);
+	sig = Pan2.ar(sig, 0, env);
+	Out.ar(0, sig);
+}).add;
+)
+
+(
+~bssA = Pbind(\instrument, \bss,
+	\dur, Pseq([
+		Pseq([1.5, 1.5, 1.5, 1.5, 1, 1, 2, 0.5, 1, 2.5, 1, 1], 1),
+		Pseq([1.5, 1.5, 1.5, 1.5, 1, 1, 2, 2, 2, 1, 1], 1),
+	], 1),
+	\legato, 0.7,
+	\amp, 0.6,
+	\scale, [2, 4, 5, 7, 9, 10, 12],
+	\degree, Pseq([
+		Pseq([0, 1, 2, 0, 6, 2, 5, \, 4, 3, 5, 4], 1),
+		Pseq([0, 1, 2, 0, 6, 2, 5, 5, 5, 5, 4], 1)
+	], inf),
+	\octave, Pseq([
+		Pseq([3, 3, 3, 3, 2, 3, 2, 2, 2, 2, 2, 2], 1),
+		Pseq([3, 3, 3, 3, 2, 3, 2, 2, 2, 2, 2], 1)
+	], inf)
+).play;
+
