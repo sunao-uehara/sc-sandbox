@@ -2,11 +2,10 @@
 "rydeen" -- ymo
 *******************************************************************************/
 (
-//ダブルクリックで選択後、実行
-//ページ下の再生コードを実行
+
 Tempo.bpm = 142;
 s = Server.default;
-s.waitForBoot {//サーバ起動後に実行される
+s.waitForBoot {// executed after server started
 /* ------------------------------------------------------------------------ SynthDefs */
 
 	SynthDef(\hat, {| amp=0.1, pan=0 |
@@ -347,7 +346,7 @@ s.waitForBoot {//サーバ起動後に実行される
 ~bodyA = Ppar([~arpA, ~prcA, ~leadA, ~hrmA, ~bssA, ~hatA, ~snrA, ~kikA], 1);
 ~bodyB = Ppar([~arpB, ~prcB, ~leadB, ~hrmB, ~bssB, ~hatB, ~snrB, ~kikB], 1);
 });
-//再生！
+// play !!
 ~rydeen = Pseq([~intro, Pseq([~bodyA, ~bodyB], inf)]).play;
-//停止
+// stop
 ~rydeen.stop;
